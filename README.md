@@ -55,10 +55,18 @@ Then install Webmin:
 ```
 sudo apt-get install webmin 
 ```
- 
+
+## Temperature Sensors
+```
+sudo apt-get install lm-sensors
+```
+Check Temperatures:
+```
+sensors
+```
 
 ## Configure Drives and ZFS 
-### ZFS Primer
+### ZFS Primer & [Cheat Sheet](https://www.csparks.com/ZFS%20Without%20Tears.html)
 - Multiple Drives in a vdev (Takes care of the redundancy and expanding vdevs by taking larger drives)
 - One or multiple vdev in a pool (Takes cake of merging multiple vdevs by striping)
 - Cannot remove vdev from a pool
@@ -134,7 +142,7 @@ sudo cp /opt/sanoid/sanoid.defaults.conf /etc/sanoid/sanoid.defaults.conf
 todo: Something is missing here
 
 ### EDIT SANOID CONFIG FILE
-see [here for info](https://github.com/jimsalterjrs/sanoid)
+see [here for info](https://github.com/jimsalterjrs/sanoid) or [here](https://www.svennd.be/zfs-snapshots-of-proxmox-using-sanoid/)
 ```
 sudo nano /etc/sanoid/sanoid.conf
 ```
