@@ -1,5 +1,5 @@
 # Ubuntu-Nas-Server-Setup
-Documentation and Scripts to setup Ubuntu 16.04 Server as a ZFS-Based NAS with Webmin Administration and ZFS replication
+Documentation and Scripts to setup Ubuntu 16.04 Server as a ZFS-Based NAS with Webmin Administration and ZFS replication between servers
 
 When in a mixed UBUNTU/FREENAS environment and wanting ZFS replication between one system and another, it's easier to just setup root ssh on all the machines and setup ssh keys to allow logins.  This may not be the most secure setup, however, this is how I was able to get ZFS replication between FREENAS and UBUNTU to play nice. 
 
@@ -86,7 +86,7 @@ sensors
 - Add pairs of mirrors to pool
 - Pair drives by Size, spread by age
 - Allows for expansion by replacing 2 drives.
-- rebuilding only stess 1 drive.  Failure of that drive would fail the whole pool - Take backups!!!
+- Rebuilding only stess 1 drive.  Failure of that drive would fail the whole pool - Take backups!!!
 - Run a long test and check their SMART Settings
 ```
 sudo smartctl -t long /dev/sda
@@ -127,10 +127,16 @@ sudo zpool create Pool raidz2 /dev/sdv /dev/sdw /dev/sdx /dev/sdy /dev/sdz
 
 
 ## Install SANOID 
+SANOID manages ZFS snapshots. It also includes Syncoid which enables easy replication of ZFS snapshots between servers.
+
 ### Install steps
-todo
+- Install Sanoid on local server (Source)
+- Configure Snapshots on local server 
+- Install Sanoid on remote server (Destination)
+- Configure Snapshots on remote server (to ensure deletion of ol snapshots)
+
 ### SETUP SANOID
-SANOID is manages ZFS snapshots.
+Make sure GIT and other libraries are first installed - as per steps above.
 ```
 cd /opt
 sudo git clone https://github.com/jimsalterjrs/sanoid.git
@@ -139,21 +145,29 @@ sudo mkdir -p /etc/sanoid
 sudo cp /opt/sanoid/sanoid.conf /etc/sanoid/sanoid.conf
 sudo cp /opt/sanoid/sanoid.defaults.conf /etc/sanoid/sanoid.defaults.conf
 ```
-todo: Something is missing here
 
 ### EDIT SANOID CONFIG FILE
 see [here for info](https://github.com/jimsalterjrs/sanoid) or [here](https://www.svennd.be/zfs-snapshots-of-proxmox-using-sanoid/)
 ```
 sudo nano /etc/sanoid/sanoid.conf
 ```
-ADD SANOID TO CRONTAB (ROOT)
+The first portion of the config file configures the snapshots and how long they are kept.
+The second portion of the config file configures the various strategies as templates.  By default, I use templates since they can be applied across all pools and datasets that I manage.  I use template_production at all the sources and template_backup for all the backups.
+
+### ADD SANOID TO CRONTAB (ROOT)
+This will schedule the snapshots.
+```
 sudo contab -e
-
+```
+Add this line
+```
 */5 * * * * /usr/sbin/sanoid --cron
-
+```
+If you want to replicate between UBUNTU machines, you will need to run Sanoid and Syncoid as root since only root has zfs and zpool permissions. (you need sudo to run Sanoid and Syncoid handles ZFS snapshots)  If you want to do remote replication, you aslo need to setup passwordless SSH (using keys). Unfortunately, this means root ssh between server using keys.
 
 ## Root SSH 
-By default, root does not have a password but ssh logins are disabled.  The following will change all that!
+
+By default, root does not have a password and ssh logins are disabled.  The following will change all that!
 ### CHANGE ROOT PASSWORD:
 ```
 sudo passwd root
@@ -179,11 +193,30 @@ Comment it out and type in:
 PermitRootLogin yes
 ```
 
-### SETUP KEYS (https://help.ubuntu.com/lts/serverguide/openssh-server.html)
+### SETUP KEYS [more here](https://help.ubuntu.com/lts/serverguide/openssh-server.html)
 ```
 ssh-keygen -t rsa
 ssh-copy-id username@remotehost
 ```
+
+todo - finish this....
+
+## Setup Replication using Syncoid.
+If you have 2 local pools, you can easily call Sanoid:
+```
+sudo syncoid datapool/dataset backuppool/dataset
+```
+If you need to replicate between a local and remote server by pushing a local dataset to a remote zfs pool:
+```
+sudo syncoid localpooldata/dataset root@remotehost:remotepoolbackup/dataset
+```
+If you need to replicate between a remote and local server by pulling a remote dataset to a local zfs pool:
+```
+sudo syncoid root@remotehost:remotepooldata/dataset localpoolbackup/dataset
+```
+This is the only method by which I was able to replicate a from FREENAS to Ubuntu.  Let me know if you know of a better way.
+
+
 
 ## Install Monitoring Scripts
 todo
