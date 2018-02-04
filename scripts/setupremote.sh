@@ -1,4 +1,5 @@
 #!/bin/bash
+host=$(hostname -f)
 
 function os_update {
 
@@ -60,11 +61,9 @@ zfs set compression=lz4 StoragePool
 zfs create StoragePool/Gluster/Vol1
 zfs create StoragePool/Gluster/Vol1/Brick1
 
-sudo service glusterfs-server start
 
-gluster peer probe localhost
 
-gluster volume create Vol1 replica 1 transport tcp localhost:/StoragePool/Gluster/Vol1/Brick1 
+gluster volume create Vol1 $host:/StoragePool/Gluster/Vol1/Brick1/Brick
 
 gluster volume start Vol1
 
