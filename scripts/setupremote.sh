@@ -6,6 +6,8 @@ sudo apt install zfs
 sudo apt install pv mbuffer lzop
 sudo apt-get install libconfig-inifiles-perl
 sudo apt-get install lm-sensors
+sudo apt-get install smartmontools
+
 
 cd /opt
 sudo git clone https://github.com/jimsalterjrs/sanoid.git
