@@ -60,8 +60,7 @@ zfs set compression=lz4 StoragePool
 zfs create StoragePool/Gluster/Vol1
 zfs create StoragePool/Gluster/Vol1/Brick1
 
-sudo systemctl status glusterfs-server.service
-sudo systemctl enable glusterfs-server.service
+sudo service glusterfs-server start
 
 gluster peer probe localhost
 
