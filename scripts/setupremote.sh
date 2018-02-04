@@ -51,10 +51,10 @@ zpool create -f StoragePool $1
 zpool status
 zfs create StoragePool/Gluster
 
-zfs set atime=off Gluster
-zfs set xattr=sa Gluster
-zfs set exec=off Gluster
-zfs set sync=disabled Gluster
+zfs set atime=off StoragePool/Gluster
+zfs set xattr=sa StoragePool/Gluster
+zfs set exec=off StoragePool/Gluster
+zfs set sync=disabled StoragePool/Gluster
 zfs set compression=lz4 StoragePool
 
 zfs create StoragePool/Gluster/Vol1
