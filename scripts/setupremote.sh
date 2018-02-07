@@ -1,5 +1,7 @@
 #!/bin/bash
-source functions.sh
+
+. functions.sh
+
 host=$(hostname -f)
 
     while true; do

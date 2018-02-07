@@ -9,6 +9,7 @@ function update_os()
 }
 
 
+
 function update_vpn
 {
   sudo apt install openssh-server  -y
