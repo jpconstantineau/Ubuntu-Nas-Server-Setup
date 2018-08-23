@@ -41,10 +41,12 @@ function configure_zfs_pool(){
   zpool status
 }
 
+function add_gluster(){
+  add-apt-repository ppa:gluster/glusterfs-4.1
+}
+
 function update_gluster(){
   apt-get install -y software-properties-common
-  add-apt-repository ppa:gluster/glusterfs-4.1
-  apt-get update
   apt-get install glusterfs-server -y
   apt-mark hold glusterfs*
   apt-get install glusterfs-client -y
@@ -178,13 +180,16 @@ host=$(hostname)
         esac 
     done
 
+if [ $run_setup_zfs_gfs == 'y' ]
+then
+
        while true; do
         echo
         echo "Create GlusterFS Monitor Dev"
         read -p "Do you want to proceed? (Y/N) " res
         case $res in
-            [Yy]* ) zfs_gfs_configure Monitor Brick1 ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_setup_gfs_monitor=y ; break;;
+            [Nn]* ) run_setup_gfs_monitor=n ;break;;
             * ) echo "Invalid answer";;
         esac 
     done
@@ -194,13 +199,50 @@ host=$(hostname)
         echo "Create GlusterFS Data Dev"
         read -p "Do you want to proceed? (Y/N) " res
         case $res in
-            [Yy]* ) zfs_gfs_configure Data Brick1 ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_setup_gfs_data=y ; break;;
+            [Nn]* ) run_setup_gfs_data=n ;break;;
             * ) echo "Invalid answer";;
         esac 
     done
+fi
 
+if [ $run_update_gluster == 'y' ]
+then
+    add_gluster
+fi 
 if [ $run_update_os == 'y' ]
 then
-update_os
+    update_os
 fi
+if [ $run_update_vpn == 'y' ]
+then
+    update_vpn
+fi
+if [ $run_update_monitor == 'y' ]
+then
+    update_monitor
+fi
+if [ $run_update_zfs == 'y' ]
+then
+    update_zfs
+fi
+
+if [ $run_update_gluster == 'y' ]
+then
+    update_gluster
+fi 
+
+if [ $run_setup_zfs_gfs == 'y' ]
+then
+    setup_zfs_gfs
+    if [ $run_setup_gfs_monitor == 'y' ]
+    then
+    zfs_gfs_configure Monitor Brick1
+    fi
+
+    if [ $run_setup_gfs_data == 'y' ]
+    then
+    zfs_gfs_configure Data Brick1
+    fi
+fi
+
