@@ -71,7 +71,9 @@ function zfs_gfs_configure(){
   chown nobody.nogroup -R /$1
   chmod 777 -R /$1
   echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
-
+  echo "[gluster-"$1"]" >> /etc/samba/smb.conf
+  echo "browseable = yes" >> /etc/samba/smb.conf
+  echo "create mask = 777" >> /etc/samba/smb.conf  
   
   service smbd restart 
 }
@@ -91,8 +93,8 @@ host=$(hostname)
         echo "Do you want to update ubuntu?"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) update_os ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_update_os=y ; break;;
+            [Nn]* ) run_update_os=n ; break;;
             * ) echo "Invalid answer";;
         esac
     done
@@ -102,8 +104,8 @@ host=$(hostname)
         echo "OpenVPN Client"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) update_vpn; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_update_vpn=y ; break;;
+            [Nn]* ) run_update_vpn=n ;break;;
             * ) echo "Invalid answer";;
         esac
     done
@@ -135,8 +137,8 @@ host=$(hostname)
         echo "Monitoring"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) update_monitor ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_update_monitor=y ; break;;
+            [Nn]* ) run_update_monitor=n ; break;;
             * ) echo "Invalid answer";;
         esac
     done
@@ -146,8 +148,8 @@ host=$(hostname)
         echo "ZFS"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) update_zfs ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_update_zfs=y ; break;;
+            [Nn]* ) run_update_zfs=n ; break;;
             * ) echo "Invalid answer";;
         esac
     done
@@ -157,8 +159,8 @@ host=$(hostname)
         echo "GlusterFS"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) update_gluster ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_update_gluster=y ; break;;
+            [Nn]* ) run_update_gluster=n ; break;;
             * ) echo "Invalid answer";;
         esac 
     done
@@ -170,8 +172,8 @@ host=$(hostname)
         echo "Setup GlusterFS on ZFS"
         read -p "Do you want to proceed? (Y/N) " res
         case $res in
-            [Yy]* ) setup_zfs_gfs ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_setup_zfs_gfs=y ; break;;
+            [Nn]* ) run_setup_zfs_gfs=n ;break;;
             * ) echo "Invalid answer";;
         esac 
     done
@@ -198,4 +200,7 @@ host=$(hostname)
         esac 
     done
 
-
+if [ $run_update_os == 'y' ]
+then
+update_os
+fi
