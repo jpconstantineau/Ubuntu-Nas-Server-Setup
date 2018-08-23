@@ -67,6 +67,18 @@ function zfs_gfs_configure(){
   gluster volume start $1
   gluster volume status
   gluster volume info
+  mkdir /$1
+  chown nobody.nogroup -R /gv0
+  chmod 777 -R /gv0
+  echo "localhost:/" $1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
+  echo "[gluster-"$1"]" >> /etc/samba/smb.conf
+  echo "browseable = yes" >> /etc/samba/smb.conf
+  echo "path = /"$1 >> /etc/samba/smb.conf
+  echo "guest ok = yes" >> /etc/samba/smb.conf
+  echo "read only = no" >> /etc/samba/smb.conf
+  echo "create mask = 777" >> /etc/samba/smb.conf  
+  
+  service smbd restart 
 }
 
 
@@ -77,7 +89,7 @@ function configure_vpn
 
 
 
-host=$(hostname -f)
+host=$(hostname)
 
     while true; do
         echo
