@@ -117,8 +117,8 @@ host=$(hostname)
         echo "Samba File Server"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) sudo apt install samba -y ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_install_samba=y ; break;;
+            [Nn]* ) run_install_samba=n ;break;;
             * ) echo "Invalid answer";;
         esac
     done
@@ -128,8 +128,8 @@ host=$(hostname)
         echo "RSync Backup"
         read -p "Do you want to install? (Y/N) " res
         case $res in
-            [Yy]* ) sudo apt install rsync -y ; break;;
-            [Nn]* ) break;;
+            [Yy]* ) run_install_rsync=y ; break;;
+            [Nn]* ) run_install_rsync=n ;break;;
             * ) echo "Invalid answer";;
         esac
     done
@@ -206,6 +206,11 @@ then
     done
 fi
 
+if [ $run_setup_zfs_gfs == 'y' ]
+then
+run_install_samba=y
+fi
+
 if [ $run_update_gluster == 'y' ]
 then
     add_gluster
@@ -218,6 +223,17 @@ if [ $run_update_vpn == 'y' ]
 then
     update_vpn
 fi
+
+if [ $run_install_samba == 'y' ]
+then
+sudo apt install samba -y 
+fi
+
+if [ $run_install_rsync == 'y' ]
+then
+sudo apt install rsync -y 
+fi
+
 if [ $run_update_monitor == 'y' ]
 then
     update_monitor
