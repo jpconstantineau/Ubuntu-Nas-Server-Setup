@@ -43,7 +43,7 @@ function configure_zfs_pool(){
 
 function update_gluster(){
   apt-get install -y software-properties-common
-  add-apt-repository ppa:gluster/glusterfs-3.11
+  add-apt-repository ppa:gluster/glusterfs-4.1
   apt-get update
   apt-get install glusterfs-server -y
   apt-mark hold glusterfs*
@@ -66,6 +66,7 @@ function zfs_gfs_configure(){
   gluster volume create $1 $host:/StoragePool/Gluster/$1/$2/Brick
   gluster volume start $1
   gluster volume status
+  gluster volume info
 }
 
 
