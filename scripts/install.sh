@@ -71,12 +71,7 @@ function zfs_gfs_configure(){
   chown nobody.nogroup -R /$1
   chmod 777 -R /$1
   echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
-  echo "[Gluster-"$1"]" >> /etc/samba/smb.conf
-  echo "browseable = yes" >> /etc/samba/smb.conf
-  echo "path = /"$1 >> /etc/samba/smb.conf
-  echo "guest ok = yes" >> /etc/samba/smb.conf
-  echo "read only = no" >> /etc/samba/smb.conf
-  echo "create mask = 777" >> /etc/samba/smb.conf  
+
   
   service smbd restart 
 }
