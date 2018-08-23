@@ -68,10 +68,10 @@ function zfs_gfs_configure(){
   gluster volume status
   gluster volume info
   mkdir /$1
-  chown nobody.nogroup -R /gv0
-  chmod 777 -R /gv0
-  echo "localhost:/" $1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
-  echo "[gluster-"$1"]" >> /etc/samba/smb.conf
+  chown nobody.nogroup -R /$1
+  chmod 777 -R /$1
+  echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
+  echo "[Gluster-"$1"]" >> /etc/samba/smb.conf
   echo "browseable = yes" >> /etc/samba/smb.conf
   echo "path = /"$1 >> /etc/samba/smb.conf
   echo "guest ok = yes" >> /etc/samba/smb.conf
