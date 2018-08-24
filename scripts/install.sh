@@ -91,25 +91,25 @@ function configure_vpn
 
 function add_hosts
 {
-    echo "192.168.1.156   remote_1 " >> /etc/hosts
-    echo "192.168.1.162   remote_2 " >> /etc/hosts
-    echo "192.168.1.167   remote_3 " >> /etc/hosts
+    echo "192.168.1.156   gluster1 " >> /etc/hosts
+    echo "192.168.1.162   gluster2 " >> /etc/hosts
+    echo "192.168.1.167   gluster3 " >> /etc/hosts
 }
 
 function gluster_peer_group
 {
-    gluster peer probe remote_1
-    gluster peer probe remote_2
-    gluster peer probe remote_3
+    gluster peer probe gluster1
+    gluster peer probe gluster2
+    gluster peer probe gluster3
     gluster peer status
 }
 
 function gluster_build_volume
 {
  gluster volume create $1 replica 3 transport tcp \
- remote_1:/StoragePool/Gluster/$1/$2 \
- remote_2:/StoragePool/Gluster/$1/$2 \
- remote_3:/StoragePool/Gluster/$1/$2 
+ gluster1:/StoragePool/Gluster/$1/$2 \
+ gluster2:/StoragePool/Gluster/$1/$2 \
+ gluster3:/StoragePool/Gluster/$1/$2 
 
  gluster volume start $1
  gluster volume status
@@ -299,7 +299,7 @@ then
     zfs_gfs_configure Data Brick1
     fi
 
-    add_hosts
+    #add_hosts
 fi
 
     while true; do
