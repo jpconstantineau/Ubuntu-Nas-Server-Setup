@@ -32,6 +32,7 @@ function update_monitor(){
 function update_zfs(){
   sudo apt install openssh-server  -y
   sudo apt install zfs -y
+  sudo apt install zfsutils-linux  -y
   sudo apt install pv mbuffer lzop -y
   sudo apt install libconfig-inifiles-perl -y
   sudo apt install git  -y
