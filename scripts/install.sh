@@ -107,9 +107,9 @@ function gluster_peer_group
 function gluster_build_volume
 {
  gluster volume create $1 replica 3 transport tcp \
- gluster1:/StoragePool/Gluster/$1/$2 \
- gluster2:/StoragePool/Gluster/$1/$2 \
- gluster3:/StoragePool/Gluster/$1/$2 
+ gluster1:/StoragePool/Gluster/$1/$2/Brick \
+ gluster2:/StoragePool/Gluster/$1/$2/Brick \
+ gluster3:/StoragePool/Gluster/$1/$2/Brick 
 
  gluster volume start $1
  gluster volume status
