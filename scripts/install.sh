@@ -65,13 +65,16 @@ function setup_zfs_gfs(){
 function zfs_gfs_configure(){
   zfs create StoragePool/Gluster/$1
   zfs create StoragePool/Gluster/$1/$2
-  gluster volume create $1 $host:/StoragePool/Gluster/$1/$2/Brick
-  gluster volume start $1
-  gluster volume status
-  gluster volume info
   mkdir /$1
   chown nobody.nogroup -R /$1
   chmod 777 -R /$1
+}
+function zfs_gfs_configure_start(){
+  gluster volume create $1 $host:/StoragePool/Gluster/$1/$2
+  gluster volume start $1
+  gluster volume status
+  gluster volume info
+ 
   echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
   echo "[gluster-"$1"]" >> /etc/samba/smb.conf
   echo "browseable = yes" >> /etc/samba/smb.conf
