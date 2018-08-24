@@ -15,8 +15,16 @@ function update_vpn
   apt-get autoremove && apt-get autoclean 
 }
 
+
+function install_webmin
+{
+    apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python -y
+    wget http://prdownloads.sourceforge.net/webadmin/webmin_1.890_all.deb
+    dpkg --install webmin_1.890_all.deb
+}
+
 function update_monitor(){
-  apt install lm-sensors -y
+  echo "apt install lm-sensors -y"
   apt install smartmontools -y
   apt-get autoremove && apt-get autoclean   
 }
@@ -37,7 +45,7 @@ function update_zfs(){
 }
 
 function configure_zfs_pool(){
-  zpool create -f StoragePool $1
+  zpool create -f StoragePool $1 $2 $3
   zpool status
 }
 
@@ -279,6 +287,7 @@ fi
 if [ $run_update_zfs == 'y' ]
 then
     update_zfs
+    configure_zfs_pool /dev/xvdb /dev/xvdc /dev/xvde
 fi
 
 if [ $run_update_gluster == 'y' ]
@@ -357,4 +366,18 @@ fi
         esac
     done
 
-    
+
+
+
+    while true; do
+        echo
+        
+        read -p "Do you want to install Webmin? (Y/N) " res
+        case $res in
+            [Yy]* ) install_webmin ; break;;
+            [Nn]* )  break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+
