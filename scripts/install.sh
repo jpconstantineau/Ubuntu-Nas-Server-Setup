@@ -129,9 +129,11 @@ function gluster_build_volume
 function gluster_share_volume
 {
   echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
+  chown nobody.nogroup -R /$1
+  chmod 777 -R /$1
 
-  
   service smbd restart
+  mount -a
 }
 
 host=$(hostname)
@@ -146,6 +148,21 @@ host=$(hostname)
             * ) echo "Invalid answer";;
         esac
     done
+
+
+
+    while true; do
+        echo
+        
+        read -p "Do you want to install Webmin? (Y/N) " res
+        case $res in
+            [Yy]* ) run_install_webmin=y ; break;;
+            [Nn]* ) run_install_webmin=n ; break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+
 
     while true; do
         echo
@@ -261,6 +278,12 @@ if [ $run_update_gluster == 'y' ]
 then
     add_gluster
 fi 
+
+if [ $run_install_webmin == 'y' ]
+then
+    install_webmin
+fi
+
 if [ $run_update_os == 'y' ]
 then
     update_os
@@ -366,18 +389,5 @@ fi
         esac
     done
 
-
-
-
-    while true; do
-        echo
-        
-        read -p "Do you want to install Webmin? (Y/N) " res
-        case $res in
-            [Yy]* ) install_webmin ; break;;
-            [Nn]* )  break;;
-            * ) echo "Invalid answer";;
-        esac
-    done
 
 
