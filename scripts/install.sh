@@ -18,9 +18,12 @@ function update_vpn
 
 function install_webmin
 {
-    apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python -y
+    sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
+    sudo apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python -y 
+    sudo apt-get install -f -y
     wget http://prdownloads.sourceforge.net/webadmin/webmin_1.890_all.deb
-    dpkg --install webmin_1.890_all.deb
+    sudo dpkg --install webmin_1.890_all.deb
+    sudo apt-get install -f -y
 }
 
 function update_monitor(){
@@ -85,9 +88,7 @@ function zfs_gfs_configure_start(){
   gluster volume info
  
   echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
-  echo "[gluster-"$1"]" >> /etc/samba/smb.conf
-  echo "browseable = yes" >> /etc/samba/smb.conf
-  echo "create mask = 777" >> /etc/samba/smb.conf  
+
   
   service smbd restart 
 }
@@ -128,9 +129,7 @@ function gluster_build_volume
 function gluster_share_volume
 {
   echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
-  echo "[gluster-"$1"]" >> /etc/samba/smb.conf
-  echo "browseable = yes" >> /etc/samba/smb.conf
-  echo "create mask = 777" >> /etc/samba/smb.conf  
+
   
   service smbd restart
 }
