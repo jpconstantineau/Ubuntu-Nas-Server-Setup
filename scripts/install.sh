@@ -89,7 +89,42 @@ function configure_vpn
   echo 'AUTOSTART="all"' >> /etc/default/openvpn
 }
 
+function add_hosts
+{
+    echo "192.168.1.156   remote_1 " >> /etc/hosts
+    echo "192.168.1.162   remote_2 " >> /etc/hosts
+    echo "192.168.1.167   remote_3 " >> /etc/hosts
+}
 
+function gluster_peer_group
+{
+    gluster peer probe remote_1
+    gluster peer probe remote_2
+    gluster peer probe remote_3
+    gluster peer status
+}
+
+function gluster_build_volume
+{
+ gluster volume create $1 replica 3 transport tcp \
+ remote_1:/StoragePool/Gluster/$1/$2 \
+ remote_2:/StoragePool/Gluster/$1/$2 \
+ remote_3:/StoragePool/Gluster/$1/$2 
+
+ gluster volume start $1
+ gluster volume status
+ gluster volume info
+ 
+}
+function gluster_share_volume
+{
+  echo "localhost:/"$1 " /"$1 " glusterfs defaults,_netdev 0 0" >> /etc/fstab
+  echo "[gluster-"$1"]" >> /etc/samba/smb.conf
+  echo "browseable = yes" >> /etc/samba/smb.conf
+  echo "create mask = 777" >> /etc/samba/smb.conf  
+  
+  service smbd restart
+}
 
 host=$(hostname)
 
@@ -263,5 +298,63 @@ then
     then
     zfs_gfs_configure Data Brick1
     fi
+
+    add_hosts
 fi
 
+    while true; do
+        echo
+        echo "Do you want to Configure the Gluster Peer Group?"
+        read -p "Do you want to install? (Y/N) " res
+        case $res in
+            [Yy]* ) gluster_peer_group ; break;;
+            [Nn]* )  break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+    while true; do
+        echo
+        echo "Do you want to Build the Gluster Volume Monitor?"
+        read -p "Do you want to install? (Y/N) " res
+        case $res in
+            [Yy]* ) gluster_build_volume Monitor Brick1 ; break;;
+            [Nn]* )  break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+        while true; do
+        echo
+        echo "Do you want to Build the Gluster Volume Data?"
+        read -p "Do you want to install? (Y/N) " res
+        case $res in
+            [Yy]* ) gluster_build_volume Data Brick1 ; break;;
+            [Nn]* )  break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+    while true; do
+        echo
+        echo "Do you want to Share the Gluster Volume Monitor?"
+        read -p "Do you want to install? (Y/N) " res
+        case $res in
+            [Yy]* ) gluster_share_volume Monitor ; break;;
+            [Nn]* )  break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+        while true; do
+        echo
+        echo "Do you want to Share the Gluster Volume Data?"
+        read -p "Do you want to install? (Y/N) " res
+        case $res in
+            [Yy]* ) gluster_share_volume Data ; break;;
+            [Nn]* )  break;;
+            * ) echo "Invalid answer";;
+        esac
+    done
+
+    
