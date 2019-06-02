@@ -27,6 +27,8 @@ Select these packages:
 
 Copy scripts to windows machine.
 
-Edit target computer
+Edit target computer in script
+
+on server, create folder where "MACHINENAME" will be writing to
 
 Run as administrator
