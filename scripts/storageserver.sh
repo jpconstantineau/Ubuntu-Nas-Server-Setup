@@ -22,6 +22,7 @@
   sudo apt install git  -y
   sudo apt install lm-sensors -y
   sudo apt install smartmontools -y
+  sudo apt install liblz4-tool -y
   cd /opt
   sudo git clone https://github.com/jimsalterjrs/sanoid.git
   sudo ln /opt/sanoid/sanoid /usr/sbin/
