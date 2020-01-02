@@ -1,0 +1,17 @@
+We need to tell our pool to expand automatically once all the new disks have been added. We do this with the following
+
+sudo zpool set autoexpand=on pool-Storage
+
+
+
+After you have determined that a device can be replaced, use the zpool replace command to replace the device. If you are replacing the damaged device with different device, use syntax similar to the following:
+
+sudo zpool replace StoragePool /dev/sda /dev/sdb
+
+With a brand new disk and replacong old for new disks, you may need to run this instead:
+sudo zpool replace Pool -f -o ashift=9 /dev/sdg /dev/sdh
+
+
+
+notes:
+from [oracle](https://docs.oracle.com/cd/E19253-01/819-5461/gbcet/index.html)
