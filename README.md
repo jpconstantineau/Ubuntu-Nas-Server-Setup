@@ -8,6 +8,13 @@ When in a mixed UBUNTU/FREENAS environment and wanting ZFS replication between o
   - Install on Server
   - Select default options
   
+## Prefer IPV4 over IPV6
+The file /etc/gai.conf controls the order of IP addresses returned by getaddrinfo() system call which is used to resolve addresses.
+If you adjust one line, you will force all IPv4 addresses to be first
+
+### un-comment this line
+precedence ::ffff:0:0/96  100  
+  
 ## Update Ubuntu Packages
 ```
 sudo apt-get update
@@ -25,7 +32,7 @@ sudo apt-get install git
 ```
 ### Install ZFS
 ```
-sudo apt install zfs
+sudo apt install zfsutils-linux
 ```
 ### Install Packages needed by SANOID
 ```
