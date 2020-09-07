@@ -8,6 +8,15 @@ When in a mixed UBUNTU/FREENAS environment and wanting ZFS replication between o
   - Install on Server
   - Select default options
   
+## if installing in XCP-NG, install VM tools
+
+```
+mount /dev/cdrom /mnt
+bash /mnt/Linux/install.sh
+umount /dev/cdrom
+
+```
+  
 ## Prefer IPV4 over IPV6
 The file /etc/gai.conf controls the order of IP addresses returned by getaddrinfo() system call which is used to resolve addresses.
 If you adjust one line, you will force all IPv4 addresses to be first
