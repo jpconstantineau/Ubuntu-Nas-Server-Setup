@@ -10,6 +10,6 @@ sudo apt install rsync -y
 
 sudo curl https://releases.rancher.com/install-docker/19.03.sh | sh
 
-sudo usermod -aG docker USERNAME
+sudo usermod -aG docker $USER
 
-sudo docker run -d -v /data/docker/rancher-server/var/lib/rancher/:/var/lib/rancher/ --restart=unless-stopped --name rancher-server -p 8080:80 -p 8043:443 rancher/rancher:stable
+sudo docker run -d -v /data/docker/rancher-server/var/lib/rancher/:/var/lib/rancher/ --restart=unless-stopped --name rancher-server -p 8080:80 -p 8443:443 rancher/rancher:stable
