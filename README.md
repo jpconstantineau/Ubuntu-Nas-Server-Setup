@@ -46,7 +46,7 @@ sudo apt install zfsutils-linux
 ### Install Packages needed by SANOID
 ```
 sudo apt install pv mbuffer lzop
-sudo apt-get install libconfig-inifiles-perl
+sudo apt-get install libconfig-inifiles-perl libcapture-tiny-perl 
 ```
 
 ## Install Webmin for Easy Windows Shares Administration
