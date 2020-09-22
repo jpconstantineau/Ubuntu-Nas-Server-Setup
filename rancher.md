@@ -56,7 +56,7 @@ sudo chmod -x /etc/update-motd.d/10-help-text
 sudo chmod -x /etc/update-motd.d/50-motd-news
 
 sudo update-motd
-
+```
 
 ## Install Docker - a Rancher Requirment
 
