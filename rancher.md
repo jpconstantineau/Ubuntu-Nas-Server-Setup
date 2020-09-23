@@ -100,6 +100,12 @@ docker run -d -v /data/docker/rancher-server/var/lib/rancher/:/var/lib/rancher/ 
 ```
 curl -sfL https://get.k3s.io | sh -
 
+
+curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="server -t agent-secret-token" sh -s -
+k3s kubectl get node
+
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent -t agent-secret-token --server https://k3s-m:6443" sh -s -
+
 ```
 
 
